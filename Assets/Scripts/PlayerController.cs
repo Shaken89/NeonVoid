@@ -19,6 +19,10 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private bool isAlive = true;
 
+    public GameObject muzzleFlashPrefab;
+    public Transform firePoint;
+
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -73,9 +77,12 @@ public class PlayerController : MonoBehaviour
 
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         mousePos.z = 0f;
+        if (muzzleFlashPrefab && firePoint)
+            Instantiate(muzzleFlashPrefab, firePoint.position, firePoint.rotation);
 
         Vector2 direction = (mousePos - transform.position).normalized;
         Vector3 spawnPos = transform.position + (Vector3)(direction * 0.6f);
+        
 
         GameObject bullet = Instantiate(bulletPrefab, spawnPos, Quaternion.identity);
         Rigidbody2D bulletRb = bullet.GetComponent<Rigidbody2D>();
