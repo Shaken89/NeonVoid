@@ -13,19 +13,19 @@ public class HUDController : MonoBehaviour
     void Start()
     {
         if (healthBar != null)
-            healthBar.value = 1f; // полный HP
+            healthBar.value = 1f; 
         UpdateScore(0);
         UpdateWave(1);
     }
 
-    // Обновление полоски здоровья (0-1)
+    
     public void UpdateHealth(float currentHealth, float maxHealth)
     {
         if (healthBar != null)
             healthBar.value = currentHealth / maxHealth;
     }
 
-    // Обновление очков
+    
     public void UpdateScore(int points)
     {
         score += points;
@@ -33,7 +33,7 @@ public class HUDController : MonoBehaviour
             scoreText.text = "Score: " + score;
     }
 
-    // Обновление текущей волны
+    
     public void UpdateWave(int waveNumber)
     {
         if (waveText != null)

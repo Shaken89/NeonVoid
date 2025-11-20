@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class EnemySpawner : MonoBehaviour
 {
     [Header("Spawn Settings")]
-    public GameObject[] enemyPrefabs;  // Массив префабов врагов (Enemy и Enemy1)
+    public GameObject[] enemyPrefabs;  
     public float spawnRadius = 8f;
     public int startEnemyCount = 5;
     public int waveIncrease = 2;
@@ -38,7 +38,7 @@ public class EnemySpawner : MonoBehaviour
         spawningWave = true;
         currentWave++;
 
-        // Обновляем HUD текущей волны
+        
         HUDController hud = FindObjectOfType<HUDController>();
         if (hud != null)
             hud.UpdateWave(currentWave);
@@ -64,7 +64,7 @@ public class EnemySpawner : MonoBehaviour
         Vector2 spawnDir = Random.insideUnitCircle.normalized;
         Vector2 spawnPos = (Vector2)player.position + spawnDir * spawnRadius;
 
-        // выбираем случайный префаб из массива
+        
         int randomIndex = Random.Range(0, enemyPrefabs.Length);
         GameObject enemy = Instantiate(enemyPrefabs[randomIndex], spawnPos, Quaternion.identity);
         aliveEnemies.Add(enemy);

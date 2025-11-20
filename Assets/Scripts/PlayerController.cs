@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
     public float moveSpeed = 10f;
-    public float acceleration = 8f; // чем больше — быстрее разгон
+    public float acceleration = 8f; 
     private Vector2 moveInput;
     private Vector2 currentVelocity;
 
@@ -58,12 +58,12 @@ public class PlayerController : MonoBehaviour
     {
         if (!isAlive) return;
 
-        // Плавное ускорение и замедление
+        
         Vector2 targetVelocity = moveInput * moveSpeed;
         currentVelocity = Vector2.Lerp(currentVelocity, targetVelocity, acceleration * Time.fixedDeltaTime);
         rb.linearVelocity = currentVelocity;
 
-        // Плавный разворот к курсору
+        
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         mousePos.z = 0f;
         Vector2 lookDir = (mousePos - transform.position).normalized;
