@@ -572,6 +572,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 029a59fc120df5f489a8bfd75f6866ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScreenWrap2D
+  wrapMode: 0
+  useCustomCamera: 0
+  customCamera: {fileID: 0}
+  paddingX: 0
+  paddingY: 0
+  accountForObjectSize: 1
+  updateInFixedUpdate: 0
+  cacheScreenBounds: 1
+  boundsUpdateInterval: 0.5
+  showGizmos: 1
+  gizmosColor: {r: 0, g: 1, b: 1, a: 1}
+  invokeWrapEvents: 0
 --- !u!114 &-7380276418828572404
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -594,6 +606,23 @@ MonoBehaviour:
   firePoint: {fileID: 7437775237359507096}
   bulletSpeed: 6
   shootInterval: 1.5
+  shootRange: 10
+  bulletLifetime: 3
+  maxHealth: 3
+  showHealthBar: 1
+  healthBarPrefab: {fileID: 0}
+  scoreValue: 1
+  deathEffectPrefab: {fileID: 0}
+  shootSound: {fileID: 0}
+  hurtSound: {fileID: 0}
+  deathSound: {fileID: 0}
+  hitFlashDuration: 0.1
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  bulletLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &4495029460436393501
 GameObject:
   m_ObjectHideFlags: 0
