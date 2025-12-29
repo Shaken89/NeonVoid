@@ -5,7 +5,7 @@ using System.Collections;
 /// Berserker Enemy - becomes stronger and faster as health decreases
 /// Extremely dangerous at low HP, glows red and charges aggressively
 /// </summary>
-public class BerserkerEnemy : EnemyBase
+public class BerserkerEnemy : EnemyBase, IDamageable
 {
     [Header("Berserker Settings")]
     [SerializeField] private float enrageThreshold = 0.5f; // 50% HP
@@ -314,29 +314,36 @@ public class BerserkerEnemy : EnemyBase
                 int damage = GetEffectiveDamage();
                 if (isCharging)
                     damage = Mathf.RoundToInt(damage * 1.5f);
-                
                 health.TakeDamage(damage);
             }
         }
+        // Bullet collision
+        if (collision.gameObject.CompareTag("Bullet"))
+        {
+            Destroy(collision.gameObject);
+            TakeDamage(1); // Можно заменить на урон из пули, если нужно
+        }
     }
 
+    // Реализация интерфейса IDamageable
     public override void TakeDamage(int damage)
     {
-        base.TakeDamage(damage);
+        if (isDead) return;
+        currentHealth -= damage;
+        currentHealth = Mathf.Max(0, currentHealth);
         lastDamageTime = Time.time;
-
-        // Stop regeneration when taking damage
+        // Визуальный и аудио фидбек можно добавить по аналогии с Enemy.cs
         if (regenCoroutine != null)
         {
             StopCoroutine(regenCoroutine);
             regenCoroutine = null;
         }
-
-        // Start regeneration timer
         if (canRegenerate && !isDead)
         {
             regenCoroutine = StartCoroutine(RegenerationRoutine());
         }
+        if (currentHealth <= 0)
+            Die();
     }
 
     private IEnumerator RegenerationRoutine()

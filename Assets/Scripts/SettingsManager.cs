@@ -367,6 +367,8 @@ public class SettingsManager : MonoBehaviour
     /// </summary>
     public void BackToMainMenu()
     {
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.StopMusic();
         UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
     }
 

@@ -56,6 +56,9 @@ public class PlayerController : MonoBehaviour
     [Header("Shooting Configuration")]
     [SerializeField] private ShootingSettings shooting;
 
+    [Header("Weapon System")]
+    [SerializeField] private WeaponManager weaponManager;
+
     [Header("Visual Configuration")]
     [SerializeField] private VisualSettings visuals;
 
@@ -73,6 +76,7 @@ public class PlayerController : MonoBehaviour
     // Input
     private InputAction moveAction;
     private InputAction fireAction;
+    private InputAction switchWeaponAction;
     private Vector2 moveInput;
 
     // Physics
@@ -96,6 +100,8 @@ public class PlayerController : MonoBehaviour
         InitializeComponents();
         SetupInput();
         InitializeAmmo();
+        if (weaponManager == null)
+            weaponManager = GetComponent<WeaponManager>();
     }
 
     private void OnEnable()
@@ -108,22 +114,30 @@ public class PlayerController : MonoBehaviour
         DisableInput();
     }
 
-    private void Update()
-    {
+        private void Update()
+        {
         if (!isAlive) return;
-
+    #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+        if (PauseMenu.Instance != null && PauseMenu.Instance.IsPaused()) return;
+    #else
+        if (Time.timeScale == 0f) return;
+    #endif
         UpdateAiming();
         HandleAutoFire();
-    }
+        }
 
-    private void FixedUpdate()
-    {
+        private void FixedUpdate()
+        {
         if (!isAlive) return;
-
+    #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+        if (PauseMenu.Instance != null && PauseMenu.Instance.IsPaused()) return;
+    #else
+        if (Time.timeScale == 0f) return;
+    #endif
         UpdateMovement();
         UpdateRotation();
         EnforceBoundaries();
-    }
+        }
 
     private void OnDestroy()
     {
@@ -171,10 +185,15 @@ public class PlayerController : MonoBehaviour
         fireAction.AddBinding("<Keyboard>/space");
         fireAction.AddBinding("<Mouse>/leftButton");
 
+        // Switch weapon input
+        switchWeaponAction = gameplayMap.AddAction("SwitchWeapon", InputActionType.Button);
+        switchWeaponAction.AddBinding("<Mouse>/rightButton");
+
         // Bind callbacks
         moveAction.performed += OnMove;
         moveAction.canceled += OnMove;
         fireAction.performed += OnFire;
+        switchWeaponAction.performed += OnSwitchWeapon;
 
         gameplayMap.Enable();
     }
@@ -203,12 +222,14 @@ public class PlayerController : MonoBehaviour
     {
         moveAction?.Enable();
         fireAction?.Enable();
+        switchWeaponAction?.Enable();
     }
 
     private void DisableInput()
     {
         moveAction?.Disable();
         fireAction?.Disable();
+        switchWeaponAction?.Disable();
     }
 
     private void CleanupInput()
@@ -227,6 +248,22 @@ public class PlayerController : MonoBehaviour
             fireAction.Disable();
             fireAction.Dispose();
         }
+
+        if (switchWeaponAction != null)
+        {
+            switchWeaponAction.performed -= OnSwitchWeapon;
+            switchWeaponAction.Disable();
+            switchWeaponAction.Dispose();
+        }
+    }
+    // Переключение оружия по правой кнопке мыши
+    private void OnSwitchWeapon(InputAction.CallbackContext context)
+    {
+        if (weaponManager == null) return;
+        var types = System.Enum.GetValues(typeof(WeaponManager.WeaponType));
+        int current = (int)weaponManager.GetCurrentWeaponType();
+        int next = (current + 1) % types.Length;
+        weaponManager.SetWeapon((WeaponManager.WeaponType)types.GetValue(next));
     }
 
     #endregion
@@ -311,60 +348,18 @@ public class PlayerController : MonoBehaviour
 
     private void TryShoot()
     {
-        if (!isAlive || !canShoot || shooting.bulletPrefab == null)
+        if (!isAlive || !canShoot || weaponManager == null)
             return;
-
-        if (Time.time < nextFireTime)
-            return;
-
-        // Check ammo
-        if (shooting.maxAmmo >= 0)
-        {
-            if (currentAmmo <= 0)
-            {
-                PlayEmptyAmmoSound();
-                return;
-            }
-            currentAmmo--;
-        }
-
-        Shoot();
-        nextFireTime = Time.time + shooting.fireRate;
+#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+        if (PauseMenu.Instance != null && PauseMenu.Instance.IsPaused()) return;
+#else
+        if (Time.timeScale == 0f) return;
+#endif
+        // Используем WeaponManager для стрельбы
+        weaponManager.TryShoot(aimDirection.magnitude > 0.01f ? aimDirection : Vector2.up);
     }
 
-    private void Shoot()
-    {
-        Vector2 direction = aimDirection.magnitude > 0.01f ? aimDirection : Vector2.up;
-        Vector3 spawnPos = transform.position + (Vector3)(direction * shooting.bulletSpawnDistance);
-
-        // Spawn bullet
-        GameObject bullet = Instantiate(shooting.bulletPrefab, spawnPos, Quaternion.identity);
-        
-        // Set bullet rotation
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        bullet.transform.SetPositionAndRotation(
-            new Vector3(spawnPos.x, spawnPos.y, 0f),
-            Quaternion.Euler(0f, 0f, angle - 90f)
-        );
-
-        // Apply velocity
-        Rigidbody2D bulletRb = bullet.GetComponent<Rigidbody2D>();
-        if (bulletRb != null)
-        {
-            bulletRb.linearVelocity = direction * shooting.bulletSpeed;
-            bulletRb.gravityScale = 0f;
-        }
-
-        // Tag as player bullet
-        bullet.tag = "Bullet";
-
-        // Auto-destroy
-        Destroy(bullet, shooting.bulletLifetime);
-
-        // Visual and audio feedback
-        SpawnMuzzleFlash();
-        PlayShootSound();
-    }
+    // Удалено: стрельба теперь через WeaponManager
 
     private void SpawnMuzzleFlash()
     {

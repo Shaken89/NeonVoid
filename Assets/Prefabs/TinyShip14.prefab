@@ -39,7 +39,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -507,7 +507,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -515,10 +515,10 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
+  m_CollisionDetection: 1
+  m_Constraints: 4
 --- !u!66 &3449550916792945114
 CompositeCollider2D:
   m_ObjectHideFlags: 0
@@ -691,7 +691,7 @@ MonoBehaviour:
   maxHealth: 3
   moveSpeed: 2
   scoreValue: 1
-  detectionRange: 15
+  detectionRange: 6
   spriteRenderer: {fileID: 2167307409524610810}
   damageColor: {r: 1, g: 0, b: 0, a: 1}
   hurtSound: {fileID: 0}
@@ -710,7 +710,7 @@ MonoBehaviour:
   groundPoundDamage: 3
   groundPoundCooldown: 8
   groundPoundWindupTime: 1
-  canRegenerate: 1
+  canRegenerate: 0
   regenDelay: 5
   regenAmount: 1
   regenInterval: 2

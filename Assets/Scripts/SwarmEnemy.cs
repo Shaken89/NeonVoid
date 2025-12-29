@@ -5,7 +5,7 @@ using System.Collections;
 /// Swarm Enemy - small, fast enemies that attack in coordinated groups
 /// Слабые по отдельности, но опасны в группе
 /// </summary>
-public class SwarmEnemy : EnemyBase
+public class SwarmEnemy : EnemyBase, IDamageable
 {
     [Header("Swarm Settings")]
     [SerializeField] private float groupRadius = 3f;
@@ -258,6 +258,12 @@ public class SwarmEnemy : EnemyBase
                 health.TakeDamage(damage);
             }
         }
+        // Bullet collision
+        if (collision.gameObject.CompareTag("Bullet"))
+        {
+            Destroy(collision.gameObject);
+            TakeDamage(1); // Можно заменить на урон из пули, если нужно
+        }
     }
 
     protected override void Die()
@@ -289,6 +295,18 @@ public class SwarmEnemy : EnemyBase
         yield return new WaitForSeconds(3f);
         moveSpeed = 3f; // Reset to base
     }
+
+
+    // Реализация интерфейса IDamageable
+    public override void TakeDamage(int damage)
+    {
+            if (isDead) return;
+            currentHealth -= damage;
+            currentHealth = Mathf.Max(0, currentHealth);
+            // Визуальный и аудио фидбек можно добавить по аналогии с Enemy.cs
+            if (currentHealth <= 0)
+                Die();
+        }
 
     private void OnDrawGizmosSelected()
     {

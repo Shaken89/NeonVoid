@@ -2715,7 +2715,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3230,7 +3230,7 @@ MonoBehaviour:
   sfxVolumeSlider: {fileID: 0}
   musicVolumeText: {fileID: 0}
   sfxVolumeText: {fileID: 0}
-  settingsBackButton: {fileID: 0}
+  settingsBackButton: {fileID: 1513661522}
   highScoreText: {fileID: 0}
   gamesPlayedText: {fileID: 0}
   totalKillsText: {fileID: 0}
@@ -3239,8 +3239,8 @@ MonoBehaviour:
   resetStatsButton: {fileID: 0}
   creditsBackButton: {fileID: 0}
   gameSceneName: SampleScene
-  menuMusic: {fileID: 0}
-  buttonClickSound: {fileID: 0}
+  menuMusic: {fileID: 8300000, guid: e427f6657e5b2e549b5e5ec74d8e8b7b, type: 3}
+  buttonClickSound: {fileID: 8300000, guid: 19f89c6e740e7447f9e12a8310d3e973, type: 3}
 --- !u!114 &942815248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6475,7 +6475,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -6798,7 +6798,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

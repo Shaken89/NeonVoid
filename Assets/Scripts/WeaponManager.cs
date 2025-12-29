@@ -62,10 +62,17 @@ public class WeaponManager : MonoBehaviour
         // Handle laser weapon separately
         if (currentWeaponType == WeaponType.Laser)
         {
+            #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+            if (UnityEngine.InputSystem.Mouse.current != null && UnityEngine.InputSystem.Mouse.current.leftButton.isPressed)
+                FireLaser();
+            else
+                StopLaser();
+            #else
             if (Input.GetMouseButton(0))
                 FireLaser();
             else
                 StopLaser();
+            #endif
         }
     }
 

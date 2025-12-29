@@ -2,6 +2,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+using UnityEngine.InputSystem;
+#endif
 
 /// <summary>
 /// Pause menu system with settings and controls.
@@ -26,7 +29,12 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private Button settingsBackButton;
 
     [Header("Input")]
+#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+    [SerializeField] private InputActionAsset inputActionsAsset;
+    private InputAction pauseAction;
+#else
     [SerializeField] private KeyCode pauseKey = KeyCode.Escape;
+#endif
 
     [Header("Audio")]
     [SerializeField] private AudioClip pauseSound;
@@ -51,6 +59,32 @@ public class PauseMenu : MonoBehaviour
         }
 
         InitializeUI();
+    #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+        if (inputActionsAsset == null)
+        {
+            Debug.LogError("InputActionAsset not assigned in PauseMenu.");
+        }
+        else
+        {
+            var playerMap = inputActionsAsset.FindActionMap("Player", true);
+            pauseAction = playerMap.FindAction("Pause", true);
+            pauseAction.performed += ctx => TogglePause();
+        }
+    #endif
+    }
+
+    private void OnEnable()
+    {
+#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+        pauseAction?.Enable();
+#endif
+    }
+
+    private void OnDisable()
+    {
+#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+        pauseAction?.Disable();
+#endif
     }
 
     private void Start()
@@ -61,10 +95,12 @@ public class PauseMenu : MonoBehaviour
 
     private void Update()
     {
+#if !ENABLE_INPUT_SYSTEM || ENABLE_LEGACY_INPUT_MANAGER
         if (Input.GetKeyDown(pauseKey))
         {
             TogglePause();
         }
+#endif
     }
 
     #endregion
@@ -132,6 +168,16 @@ public class PauseMenu : MonoBehaviour
         previousTimeScale = Time.timeScale;
         Time.timeScale = 0f;
 
+        #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+        if (inputActionsAsset != null)
+        {
+            var playerMap = inputActionsAsset.FindActionMap("Player", true);
+            var uiMap = inputActionsAsset.FindActionMap("UI", true);
+            playerMap.Disable();
+            uiMap.Enable();
+            Debug.Log("PauseMenu: UI map enabled");
+        }
+        #endif
         ShowPauseMenu();
         PlaySound(pauseSound);
     }
@@ -141,6 +187,15 @@ public class PauseMenu : MonoBehaviour
         isPaused = false;
         Time.timeScale = previousTimeScale;
 
+#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+        if (inputActionsAsset != null)
+        {
+            var playerMap = inputActionsAsset.FindActionMap("Player", true);
+            var uiMap = inputActionsAsset.FindActionMap("UI", true);
+            uiMap.Disable();
+            playerMap.Enable();
+        }
+#endif
         HidePauseMenu();
         PlaySound(resumeSound);
     }
@@ -152,6 +207,12 @@ public class PauseMenu : MonoBehaviour
 
         if (settingsPanel != null)
             settingsPanel.SetActive(false);
+
+        if (resumeButton != null)
+        {
+            resumeButton.Select();
+            Debug.Log("PauseMenu: Resume button selected");
+        }
     }
 
     public void HidePauseMenu()
@@ -171,6 +232,7 @@ public class PauseMenu : MonoBehaviour
 
     private void OpenSettings()
     {
+        Debug.Log("PauseMenu: Settings button clicked");
         if (pauseMenuPanel != null)
             pauseMenuPanel.SetActive(false);
 
@@ -182,6 +244,7 @@ public class PauseMenu : MonoBehaviour
 
     private void CloseSettings()
     {
+        Debug.Log("PauseMenu: Back button clicked");
         if (settingsPanel != null)
             settingsPanel.SetActive(false);
 
@@ -239,16 +302,20 @@ public class PauseMenu : MonoBehaviour
 
     private void ReturnToMainMenu()
     {
+        Debug.Log("PauseMenu: Main Menu button clicked");
         PlaySound(buttonClickSound);
         Time.timeScale = 1f;
         isPaused = false;
-        
+        // Остановить игровую музыку перед переходом на меню
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.StopMusic();
         // Load main menu scene
         SceneManager.LoadScene("MainMenu");
     }
 
     private void QuitGame()
     {
+        Debug.Log("PauseMenu: Exit button clicked");
         PlaySound(buttonClickSound);
         
         #if UNITY_EDITOR
