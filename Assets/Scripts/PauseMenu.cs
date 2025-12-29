@@ -145,7 +145,7 @@ public class PauseMenu : MonoBehaviour
         PlaySound(resumeSound);
     }
 
-    private void ShowPauseMenu()
+    public void ShowPauseMenu()
     {
         if (pauseMenuPanel != null)
             pauseMenuPanel.SetActive(true);
@@ -154,7 +154,7 @@ public class PauseMenu : MonoBehaviour
             settingsPanel.SetActive(false);
     }
 
-    private void HidePauseMenu()
+    public void HidePauseMenu()
     {
         if (pauseMenuPanel != null)
             pauseMenuPanel.SetActive(false);

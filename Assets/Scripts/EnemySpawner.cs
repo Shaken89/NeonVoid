@@ -500,6 +500,68 @@ public class EnemySpawner : MonoBehaviour
     /// </summary>
     public int GetTotalEnemiesSpawned() => totalEnemiesSpawned;
 
+    /// <summary>
+    /// Spawns a boss enemy.
+    /// </summary>
+    public void SpawnBoss()
+    {
+        // Find boss prefab (assuming it's in enemyTypes array)
+        GameObject bossPrefab = null;
+        foreach (var enemyData in enemyTypes)
+        {
+            if (enemyData.enemyName.ToLower().Contains("boss"))
+            {
+                bossPrefab = enemyData.enemyPrefab;
+                break;
+            }
+        }
+
+        if (bossPrefab == null)
+        {
+            Debug.LogWarning("EnemySpawner: No boss prefab found!");
+            return;
+        }
+
+        // Spawn boss at center top
+        Vector2 spawnPos = player != null ? 
+            (Vector2)player.position + Vector2.up * spawnRadius * 0.8f : 
+            (Vector2)spawnCenter.position;
+
+        GameObject boss = Instantiate(bossPrefab, spawnPos, Quaternion.identity);
+        aliveEnemies.Add(boss);
+        totalEnemiesSpawned++;
+
+        Debug.Log("<color=red>BOSS SPAWNED!</color>");
+    }
+
+    /// <summary>
+    /// Sets the current wave number.
+    /// </summary>
+    public void SetWave(int wave)
+    {
+        currentWave = wave;
+        UpdateHUD();
+    }
+
+    /// <summary>
+    /// Starts spawning a wave with specified enemy count.
+    /// </summary>
+    public void StartWave(int enemyCount)
+    {
+        if (waveCoroutine != null)
+            StopCoroutine(waveCoroutine);
+        
+        waveCoroutine = StartCoroutine(SpawnWaveEnemies(enemyCount));
+    }
+
+    /// <summary>
+    /// Checks if the current wave is complete.
+    /// </summary>
+    public bool IsWaveComplete()
+    {
+        return !isSpawningWave && aliveEnemies.Count == 0;
+    }
+
     #endregion
 
     #region Debug Visualization

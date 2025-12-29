@@ -84,6 +84,11 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     [SerializeField] private bool reloadSceneOnDeath = true;
     [SerializeField] private string gameOverSceneName = "";
 
+    // Events
+    public System.Action OnDeath;
+    public System.Action<int> OnHealthChanged;
+    public System.Action<int> OnShieldChanged;
+
     // State
     private int currentHealth;
     private int currentShield;
@@ -375,6 +380,9 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 
         Debug.Log("💀 Player died!");
 
+        // Invoke death event
+        OnDeath?.Invoke();
+
         // Disable player controller
         if (playerController != null)
         {
@@ -524,6 +532,10 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         {
             hud.UpdateHealth(currentHealth, health.maxHealth);
         }
+
+        // Invoke events
+        OnHealthChanged?.Invoke(currentHealth);
+        OnShieldChanged?.Invoke(currentShield);
     }
 
     #endregion

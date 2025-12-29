@@ -90,7 +90,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 845767083, guid: ca4e4d63934e16a4f827aa1e94ab0c61, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -608,13 +608,13 @@ MonoBehaviour:
   shootInterval: 1.5
   shootRange: 10
   bulletLifetime: 3
-  maxHealth: 3
-  showHealthBar: 1
+  maxHealth: 2
+  showHealthBar: 0
   healthBarPrefab: {fileID: 0}
   scoreValue: 1
   deathEffectPrefab: {fileID: 0}
-  shootSound: {fileID: 0}
-  hurtSound: {fileID: 0}
+  shootSound: {fileID: 8300000, guid: 29bde6326b4c34ad8a12da475f79b50a, type: 3}
+  hurtSound: {fileID: 8300000, guid: 80e397195ea2940b69ee7bdbded856a5, type: 3}
   deathSound: {fileID: 0}
   hitFlashDuration: 0.1
   enemyLayer:

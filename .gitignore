@@ -112,3 +112,56 @@ Assets/TextMesh Pro/Resources/DefaultStyleSheet*.*
 # Keep only folder structure and meta files
 !Assets/TextMesh Pro/**/*.meta
 !Assets/TextMesh Pro/Resources/**/*.meta
+
+# ========================
+# Documentation & Guides
+# ========================
+
+# Ignore all guide/documentation markdown files
+README.md
+SETUP_GUIDE.md
+QUICKSTART.md
+PRESENTATION_GUIDE.md
+PROJECT_STATUS.md
+SUMMARY.md
+INTEGRATION_GUIDE.md
+НОВЫЕ_СИСТЕМЫ_ЭТАП1.md
+UNITY_READY.md
+INTEGRATION_GUIDE.md
+
+# ========================
+# Unused Assets
+# ========================
+
+# Ignore asset store readme files
+Assets/*/Read Me*.pdf
+Assets/*/Read Me*.txt
+Assets/*/ReadMe*.pdf
+Assets/*/ReadMe*.txt
+
+# Ignore unused asset folders (примеры, демо, документация)
+Assets/**/Examples/
+Assets/**/Samples/
+Assets/**/Demo/
+Assets/**/Demos/
+Assets/**/Documentation/
+Assets/**/Docs/
+Assets/**/Tutorial/
+Assets/**/Tutorials/
+
+# Specific unused assets in this project
+Assets/GabrielAguiarProductions/
+Assets/InfinityPBR - Magic Pig Games/
+Assets/Casual Game Sounds U6/
+Assets/DinV/
+Assets/_Recovery/
+
+# Ignore Unity demo/sample scenes from asset packages
+Assets/*/Scenes/Demo*.unity
+Assets/*/Scenes/Sample*.unity
+Assets/*/Scenes/Example*.unity
+
+# Ignore test/example scripts from asset packages
+Assets/*/Scripts/Examples/
+Assets/*/Scripts/Demo/
+Assets/*/Scripts/Tests/
