@@ -118,7 +118,6 @@ Assets/TextMesh Pro/Resources/DefaultStyleSheet*.*
 # ========================
 
 # Ignore all guide/documentation markdown files
-README.md
 SETUP_GUIDE.md
 QUICKSTART.md
 PRESENTATION_GUIDE.md
