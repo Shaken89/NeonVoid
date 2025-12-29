@@ -117,9 +117,7 @@
 ## 👥 Team
 
 ### Developers
-- **Lead Developer & Programmer** - [Your Name]
-- **Game Designer** - [Your Name]
-- **UI/UX Designer** - [Your Name]
+- **Lead Developer & Programmer** - Shynggyssuly Shaken
 
 ### Assets Used
 - **Tiny Ships** - Ship sprites by [Asset Pack Author]
